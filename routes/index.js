@@ -7,6 +7,7 @@ var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var router = express.Router();
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
+var debug = require('debug')('flapper-news:server');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -31,11 +32,15 @@ router.post('/register', function(req, res, next){
   var user = new User();
 
   user.username = req.body.username;
-
   user.setPassword(req.body.password);
 
   user.save(function (err){
-    if(err){return next(err); }
+    if(err){
+      debug('Failed to save user: ' + err);
+      return next(err); 
+    }
+
+    debug('New user saved! : ' + user.username);
     return res.json({token: user.generateJWT()})
   });
 });

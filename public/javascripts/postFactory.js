@@ -1,6 +1,6 @@
 var app = angular.module('flapperNews');
 
-app.factory('posts', ['$http', 'auth',  function($http){
+app.factory('posts', ['$http', 'auth',  function($http, auth){
 
   var o = {
     posts: []
